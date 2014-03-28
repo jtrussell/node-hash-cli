@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var program = require('commander')
+  , hash = require('node_hash')
+  , fs = require('fs');
+
+program
+  .version(require('../package.json').version)
+  .usage('[options] <file>')
+  .option('-a, --algorithm <algorithm>', 'md5 | sha1 | sha256 | sha512 | ripmed160', 'md5')
+  .option('-s, --salt <salt>', 'An optional salt')
+  .parse(process.argv);
+
+if(2 === process.argv.length) {
+  program.help();
+}
+
+var stuffToHash = fs.readFileSync(program.args[0]).toString()
+  , hashed = hash[program.algorithm](stuffToHash);
+
+process.stdout.write(hashed);
